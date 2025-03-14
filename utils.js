@@ -56,7 +56,7 @@ async function init() {
 
     //create a variable to hold the JSON data
     let occupations = null; 
-    
+
     //try to retrieve the JSON data from the server
     try {
         //retrieve the JSON data from the server
@@ -70,34 +70,32 @@ async function init() {
 
     //show JSON data on the html page
     root.innerHTML = buildList(occupations);
-}
 
-function buildList(jobs) {
-    //create an empty string to hold the HTML
-    let html = '';
+    function buildList(jobs) {
+        //create an empty string to hold the HTML
+        let html = '<select>';
 
-    //loop through the array of job objects retrieved from the JSON data
-    for (let job of jobs) {
+        //loop through the array of job objects retrieved from the JSON data
+        for (let job of jobs) {
+            //create an option for each job
+            html += `<option value="${job.salary}">${job.occupation}</option>`;
+        }
 
-        //start an HTML section for each job
-        html += '<section>';
+        //close the select element
+        html += '</select>';
+        html += '<div id="salaryDisplay"></div>';
 
-        /* An alternative way of looping through each item in the data, not as useful for this assignment but something to keep in mind for a story? ... */
-        //loop through each entry and create a div for each key:value pair
-        // for (let key in job) {
-        //     html += `<div><strong>${key}</strong>: ${job[key]}</div > `;
-        // }
+        // Add event listener to the <select> element
+        const selectElement = document.querySelector('select');
+        selectElement.addEventListener('change', function(event) {
+            // Log the selected occupation's salary to the console
+            console.log(`Selected Salary: ${event.target.value}`);
+        });
 
-        //create a div element for the job title
-        html += `<div><strong>Occupation</strong>: ${job.occupation}</div>`;
-        //create a div element for the salary and format it as currency
-        html += `<div><strong>Salary</strong>: $${job.salary.toLocaleString('en-US')}</div>`;
-        //close the section
-        html += '</section>';
+        //return the HTML string
+        return html;
     }
-
-    //return the completed html
-    return html;
 }
+
 //initialize the web page when the DOM is ready
 document.addEventListener('DOMContentLoaded', init);
